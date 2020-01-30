@@ -1,0 +1,15 @@
+<h1 class="product-info">Product Info</h1>
+
+<img src=<%= @result['image_link'] %> alt="img">
+
+<h3><%= @result['brand'] %></h3>
+<p><%= @result['name'] %></p>
+<p>$ <%= @result['price'] %></p>
+<p>Ratings : <%= @result['rating'] %></p>
+<p>Category : <%= @result['category'] %></p>
+<p><%= @result['tag_list'] %></p>
+
+<form action="/product/<%= @result['id'] %>" method="post">
+    
+    <button>Add to Cart</button>
+</form>

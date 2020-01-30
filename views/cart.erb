@@ -1,0 +1,65 @@
+<h1>cart</h1>
+
+<% @products.each_with_index do |e, index| %>
+<div>
+    <img class="cart_image" src=<%= e['image_link'] %> alt="image">
+    <span><strong><%= e['brand'] %></strong></span>
+    <span><%= e['name'] %></span>
+    <span>$ <%= e['price'] %></span>
+    
+    <div class="form-group">
+        <label>Quantity: </label>
+        <div class="input-group">
+            <div class="input-group-btn">
+                <button class="btn" onclick="down<%=index%>('0')">-</button>
+            </div>
+            <input type="text" class="input<%= index %>" value="1" />
+            <div class="input-group-btn">
+                <button class="btn" onclick="up<%=index%>('10')">+</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <span>$ </span><span class="each_price<%=index%>"> </span>
+    </div>
+
+    <script>
+        var sub<%=index%> = document.querySelector('.each_price<%=index%>');
+        var subTotal<%=index%> = 0;
+        var input<%=index%> = document.querySelector('.input<%=index%>');
+        function up<%=index%>(max) {
+            input<%=index%>.value = parseInt(input<%=index%>.value) + 1;
+            if (input<%=index%>.value >= parseInt(max)) {
+                input<%=index%>.value = max;
+            }
+            subTotal<%=index%> = <%= e['price'] %> * input<%=index%>.value;
+            sub<%=index%>.innerHTML = subTotal<%=index%>;
+        
+        }
+        function down<%=index%>(min) {
+            input<%=index%>.value = parseInt(input<%=index%>.value) - 1;
+            if (input<%=index%>.value <= parseInt(min)) {
+                input<%=index%>.value = min;
+            }
+            subTotal<%=index%> = <%= e['price'] %> * input<%=index%>.value;
+            sub<%=index%>.innerHTML = subTotal<%=index%>;
+        }
+        
+        
+    </script>
+</div>
+<% end %>
+
+<script>
+   var btnArr = document.querySelectorAll('.btn');
+   btnArr.forEach(e => {
+    var totalSum = () => {
+        
+    }
+    e.addEventListener('click', totalSum);
+
+   })
+
+</script>
+
+<h2>Total : <span class="total"></span></h2>
