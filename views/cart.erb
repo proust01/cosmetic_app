@@ -1,65 +1,107 @@
-<h1>cart</h1>
+<h1 class="cart title">My cart</h1>
 
-<% @products.each_with_index do |e, index| %>
-<div>
-    <img class="cart_image" src=<%= e['image_link'] %> alt="image">
-    <span><strong><%= e['brand'] %></strong></span>
-    <span><%= e['name'] %></span>
-    <span>$ <%= e['price'] %></span>
-    
-    <div class="form-group">
-        <label>Quantity: </label>
-        <div class="input-group">
-            <div class="input-group-btn">
-                <button class="btn" onclick="down<%=index%>('0')">-</button>
-            </div>
-            <input type="text" class="input<%= index %>" value="1" />
-            <div class="input-group-btn">
-                <button class="btn" onclick="up<%=index%>('10')">+</button>
+<div class="cart">
+    <% @products.each_with_index do |e, index| %>
+    <div>
+        <img class="cart_image" src=<%= e['image_link'] %> alt="image">
+        <span><strong><%= e['brand'] %></strong></span>
+        <span><%= e['name'] %></span>
+        <span>$ <%= e['price'] %></span>
+        
+        <div class="form-group">
+            <label>Quantity: </label>
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button class="btn" onclick="down<%=index%>('0')">-</button>
+                </div>
+                <input type="text" class="input<%= index %>" value="1" />
+                <div class="input-group-btn">
+                    <button class="btn" onclick="up<%=index%>('10')">+</button>
+                </div>
             </div>
         </div>
+        <h3>
+            <span>$ </span><span class="each_price<%=index%>"> </span>
+        </h3>
+
+        <script>
+            var sub<%=index%> = document.querySelector('.each_price<%=index%>');
+            var subTotal = [];
+            var input<%=index%> = document.querySelector('.input<%=index%>');
+            function up<%=index%>(max) {
+                input<%=index%>.value = parseInt(input<%=index%>.value) + 1;
+                if (input<%=index%>.value >= parseInt(max)) {
+                    input<%=index%>.value = max;
+                }
+                subTotal[<%=index%>] = <%= e['price'] %> * input<%=index%>.value;
+                sub<%=index%>.innerHTML = subTotal[<%=index%>];
+            
+            }
+            function down<%=index%>(min) {
+                input<%=index%>.value = parseInt(input<%=index%>.value) - 1;
+                if (input<%=index%>.value <= parseInt(min)) {
+                    input<%=index%>.value = min;
+                }
+                subTotal[<%=index%>] = <%= e['price'] %> * input<%=index%>.value;
+                sub<%=index%>.innerHTML = subTotal[<%=index%>];
+            }
+            
+            
+        </script>
     </div>
-    <div>
-        <span>$ </span><span class="each_price<%=index%>"> </span>
-    </div>
+    <% end %>
+</div>
+
+<h2 class="total">Total : $ <span id="total"></span></h2>
+
+
+<div id="paypal-button-container"></div>
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 
     <script>
-        var sub<%=index%> = document.querySelector('.each_price<%=index%>');
-        var subTotal<%=index%> = 0;
-        var input<%=index%> = document.querySelector('.input<%=index%>');
-        function up<%=index%>(max) {
-            input<%=index%>.value = parseInt(input<%=index%>.value) + 1;
-            if (input<%=index%>.value >= parseInt(max)) {
-                input<%=index%>.value = max;
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '0.01'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                });
             }
-            subTotal<%=index%> = <%= e['price'] %> * input<%=index%>.value;
-            sub<%=index%>.innerHTML = subTotal<%=index%>;
-        
-        }
-        function down<%=index%>(min) {
-            input<%=index%>.value = parseInt(input<%=index%>.value) - 1;
-            if (input<%=index%>.value <= parseInt(min)) {
-                input<%=index%>.value = min;
-            }
-            subTotal<%=index%> = <%= e['price'] %> * input<%=index%>.value;
-            sub<%=index%>.innerHTML = subTotal<%=index%>;
-        }
-        
-        
+
+
+        }).render('#paypal-button-container');
     </script>
-</div>
-<% end %>
+
 
 <script>
-   var btnArr = document.querySelectorAll('.btn');
+    var btnArr = document.querySelectorAll('.btn');
+    var totalSpan = document.querySelector('#total');
+    var sum;
+
    btnArr.forEach(e => {
     var totalSum = () => {
-        
+        sum = subTotal.reduce((a,c) => {
+            return a + c;
+        })
+        console.log(sum);
+        totalSpan.textContent = sum;
     }
     e.addEventListener('click', totalSum);
-
    })
 
 </script>
-
-<h2>Total : <span class="total"></span></h2>

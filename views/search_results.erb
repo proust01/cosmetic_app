@@ -1,0 +1,17 @@
+<h1 class="title">Search Results</h1>
+
+<% @results.each_with_index do |e, index| %>
+
+<div class="search">
+        <div>
+            <a href="/product/<%= e['id'] %>"><img class="cart_image" src=<%= e['image_link'] %> alt="image"></a>
+        </div>
+        <div>
+            <span><strong><%= e['brand'] %></strong></span>
+            <span><%= e['name'] %></span>
+            <span>$ <%= e['price'] %></span>
+        </div>
+
+</div>
+
+<% end %>

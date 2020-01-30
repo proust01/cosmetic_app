@@ -3,6 +3,11 @@ require 'sinatra'
 require 'httparty'
 require 'bcrypt'
 require 'pg'
+require "stripe"
+Stripe.api_key = "sk_test_xTyJWvrQ95ysrgFiFNx44pKo00THDHKQkx"
+
+
+
 
 if development?
   require 'sinatra/reloader' 
@@ -34,17 +39,27 @@ def create_user(email, password, gender, age, skin_type, skin_trouble)
 end
 
 
-def create_products(brand, name, image_link, price, user_id)
+def create_products(brand, name, image_link, price)
 
   sql = <<~SQL
     INSERT INTO products
-    (brand, name, image_link, price, user_id)
+    (brand, name, image_link, price)
     VALUES
-    ($1, $2, $3, $4, $5)
+    ($1, $2, $3, $4)
   SQL
 
-  run_sql(sql, [brand, name, image_link, price, user_id])
+  run_sql(sql, [brand, name, image_link, price])
 end
+
+
+def delete_product(id)
+
+  sql = "delete from the products where id = $1"
+
+
+  run_sql(sql, [id])
+end
+
 
 def all_products
 
@@ -54,6 +69,9 @@ def all_products
 end
 
 enable :sessions
+
+
+
 
 
 def logged_in?
@@ -80,10 +98,25 @@ get '/' do
   erb :index
 end
 
-# get '/product' do
 
-#   erb :product
-# end
+post '/' do
+  session[:search] = params[:search]
+  p session[:search]
+
+  redirect '/search_results'
+end
+
+
+get '/search_results' do
+
+  p session[:search]
+  # url = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{session[:search]}"
+  url = "http://makeup-api.herokuapp.com/api/v1/products.json?product_type=#{session[:search]}"
+  @results = HTTParty.get(url)
+
+  erb :search_results
+end
+
 
 get '/product/:id' do
   
@@ -100,7 +133,6 @@ post '/product/:id' do
   url = "http://makeup-api.herokuapp.com/api/v1/products.json"
   @results = HTTParty.get(url)
   index = @results.index{|e| e['id'] == params[:id].to_i}
-  p index
   @result = @results[index]
 
   create_products(@result['brand'], @result['name'], @result['image_link'], @result['price'])
@@ -108,12 +140,18 @@ post '/product/:id' do
   redirect '/cart'
 end
 
+get '/payment' do
+
+  erb :payment
+end
+
 
 get '/cart' do
   redirect '/login' unless logged_in?
 
   @products = all_products()
-  p @products
+
+  # delete_product(id)
 
   erb :cart
 end

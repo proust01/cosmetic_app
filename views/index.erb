@@ -1,14 +1,14 @@
     
-<div id="carou carouselExampleControls" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleControls" class="carou carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://theweekendedition.com.au/wp-content/uploads/2018/10/TWE-Biome-Skincare-03-1100x550-c-center.jpg" class="d-block w-80" alt="skin1">
+      <img class="carou" src="https://theweekendedition.com.au/wp-content/uploads/2018/10/TWE-Biome-Skincare-03-1100x550-c-center.jpg" class="d-block w-80" alt="skin1">
     </div>
     <div class="carousel-item">
-      <img src="https://theweekendedition.com.au/wp-content/uploads/2018/10/TWE-Biome-Skincare-03-1100x550-c-center.jpg" class="d-block w-80" alt="skin2">
+      <img class="carou" src="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F38%2F2018%2F12%2F12225019%2Fmom_slammed_for_a_video_of_her_3-year-old_applying_makeup_like_a_pro_still.jpg&q=85" class="d-block w-80" alt="skin2">
     </div>
     <div class="carousel-item">
-      <img src="https://theweekendedition.com.au/wp-content/uploads/2018/10/TWE-Biome-Skincare-03-1100x550-c-center.jpg" class="d-block w-80" alt="skin3">
+      <img class="carou" src="https://theweekendedition.com.au/wp-content/uploads/2018/10/TWE-Biome-Skincare-03-1100x550-c-center.jpg" class="d-block w-80" alt="skin3">
     </div>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -21,12 +21,12 @@
   </a>
 </div>
 
-<h2>Recommended for you</h2>
+<h2 class="recommended">Recommended for you</h2>
 <div class="row row-cols-1 row-cols-md-4">
     <% @results.sample(8).each do |e| %>
     <div class="col mb-4">
         <div class="container card h-100" style="width: 18rem;">
-            <a href="/product/<%= e['id'] %>"><img class="main-img card-img-top" src=<%= e['image_link'] %> alt=""></a>
+            <a href="/product/<%= e['id'] %>"><img class="image main-img card-img-top" src=<%= e['image_link'] %> alt=""></a>
             <div class="card-body">
                 <p class="card-text"><%= e['name'] %></p>
                 <p class="card-text">$ <%= e['price'] %></p>

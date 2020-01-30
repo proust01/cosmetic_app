@@ -60,3 +60,6 @@ ALTER TABLE dishes ADD CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES us
 
 -- change data type in column
 ALTER TABLE products ALTER COLUMN price TYPE decimal(10, 2);
+
+-- delete column
+ALTER TABLE products DROP user_id;
