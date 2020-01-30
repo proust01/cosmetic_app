@@ -3,10 +3,6 @@ require 'sinatra'
 require 'httparty'
 require 'bcrypt'
 require 'pg'
-require "stripe"
-Stripe.api_key = "sk_test_xTyJWvrQ95ysrgFiFNx44pKo00THDHKQkx"
-
-
 
 
 if development?
