@@ -10,6 +10,7 @@
         <h6>$ <%= @result['price'] %></h6>
         <p>Ratings : <%= @result['rating'] %></p>
         <p>Category : <%= @result['category'] %></p>
+        <p>description : <%= @result['description'] %></p>
         <p><%= @result['tag_list'] %></p>
 
         <form action="/product/<%= @result['id'] %>" method="post">  

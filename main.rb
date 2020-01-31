@@ -97,7 +97,6 @@ end
 
 post '/' do
   session[:search] = params[:search]
-  p session[:search]
 
   redirect '/search_results'
 end
@@ -105,10 +104,12 @@ end
 
 get '/search_results' do
 
-  p session[:search]
-  # url = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{session[:search]}"
-  url = "http://makeup-api.herokuapp.com/api/v1/products.json?product_type=#{session[:search]}"
-  @results = HTTParty.get(url)
+  if HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{params[:search]}").length > 0
+    @results = HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{params[:search]}")
+
+  else
+    @results = HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?product_type=#{params[:search]}")
+  end
 
   erb :search_results
 end
