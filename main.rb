@@ -67,9 +67,6 @@ end
 enable :sessions
 
 
-
-
-
 def logged_in?
   if session[:user_id]
     return true
@@ -95,20 +92,20 @@ get '/' do
 end
 
 
-post '/' do
-  session[:search] = params[:search]
-
-  redirect '/search_results'
-end
-
-
 get '/search_results' do
 
   if HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{params[:search]}").length > 0
+    
     @results = HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?brand=#{params[:search]}")
 
-  else
+  elsif HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?product_type=#{params[:search]}").length > 0
+    
     @results = HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?product_type=#{params[:search]}")
+    
+  else
+    
+    @results = HTTParty.get("http://makeup-api.herokuapp.com/api/v1/products.json?product_tags=#{params[:search]}")
+
   end
 
   erb :search_results
