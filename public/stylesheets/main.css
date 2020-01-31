@@ -54,7 +54,7 @@ body {
 
 .signup-con {
     margin-top: 60px;
-    margin-left: 300px;
+    margin-left: 50px;
 }
 
 .title {
@@ -65,6 +65,11 @@ body {
 
 .h4 {
     margin-top: 50px;
+}
+
+.email {
+    width: 30%;
+    height: 40px;
 }
 
 .info {
